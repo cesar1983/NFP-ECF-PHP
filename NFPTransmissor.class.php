@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Interface PHP para utilização do Webservice da Nota Fiscal Paulista. Envio, Retificação e Consulta de arquivos ECF (Cupom Fiscal)
+ * Interface PHP para utilização do Webservice da Nota Fiscal Paulista.
+ * Envio, Retificação e Consulta de arquivos ECF (Cupom Fiscal)
  * Class NFPTransmissor
  * Author: César Fernandes de Almeida
  * Date: 22/10/2014
@@ -70,7 +71,7 @@ class NFPTransmissor {
             }
 
         } catch (Exception $e) {
-            throw new NFPWSException($e);
+            throw new NFPWSException($e->getMessage());
         }
     }
 
@@ -251,7 +252,7 @@ class NFPUtil {
 	public static function parseRetornoEnvio( $resEnvio ){
 
 		if(empty($resEnvio)){
-			throw new NFPWSException("Nenhum retorno recebido da trasmissão.");
+			throw new NFPWSException("Nenhum retorno da trasmissão.");
 		}
 		$strEnvio = $resEnvio->EnviarResult;
 
@@ -285,7 +286,7 @@ class NFPUtil {
 
 
 		if(empty($resConsulta)){
-			return null; die();
+			throw new NFPWSException("Nenhum retorno da consulta.");
 		} else {
 
 			$strRetorno = $resConsulta->ConsultarResult;
@@ -836,4 +837,6 @@ class NFPWSException extends Exception {
 		parent::__construct($message, 0, $cause);
 	}
 }
+
+
 
