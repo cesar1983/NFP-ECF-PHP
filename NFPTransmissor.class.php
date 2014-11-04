@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Class NFPEmissor
+ * Interface PHP para utilização do Webservice da Nota Fiscal Paulista. Envio, Retificação e Consulta de arquivos ECF (Cupom Fiscal)
+ * Class NFPTransmissor
  * Author: César Fernandes de Almeida
  * Date: 22/10/2014
  */
