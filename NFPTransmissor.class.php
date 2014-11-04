@@ -255,22 +255,6 @@ class NFPUtil {
 		}
 		$strEnvio = $resEnvio->EnviarResult;
 
-		/*
-		 I.a) Em situação de Sucesso, será uma string separada por pipes (“|”) contendo:
-		• Data e hora de recebimento do arquivo na Sefaz
-		• Número do Lote
-		• Situação do Lote (código)
-		• Situação do Lote (descrição)
-		Exemplo:
-		21/12/2007 10:25:06|0000878|103|Lote recebido com sucesso.
-
-		I.b) Em caso de insucesso, será retornado:
-		• Código de erro
-		• Descrição do erro
-		Exemplo:
-		204|Senha não confere
-		*/
-
 		if(!empty($strEnvio)){
 
 			$ln_exp = explode('|', $strEnvio);
@@ -299,43 +283,6 @@ class NFPUtil {
 
 	public static function parseRetornoConsulta( $resConsulta ){
 
-		/*
-		 II.a) Em situação de Sucesso, será uma string separada por pipes (“|”) contendo:
-		• No. do Protocolo:
-		• Status:
-		• Alerta:
-		• CNPJ da Empresa:
-		• Razão Social da Empresa:
-		• Responsável pelo envio:
-
-		• Tipo de processamento:
-		• Nome do arquivo:
-		• T amanho do arquivo (bytes):
-
-		• Hash do arquivo:
-		• Observações:
-
-		• Data de Recebimento:
-		• Data de Processamento:
-		• T empo de Processamento (s):
-
-		• Data referência do arquivo:
-
-		• No. de CFs processados:
-		• Valor processado do lote (R$):
-
-		Linhas seguintes (apenas no caso de haver erros ou alertas no envio do arquivo):
-		• Descrição dos eventuais erros e alertas encontrados
-
-		Exemplo (contendo 3 alertas):
-		00000878|122|Lote validado com sucesso|3|00000000000000|EMPRESA ME|159062314110|Simples Validação|CURTO.TXT|3085|6D188973D9347D7FAF2D052339E11639FB016|Arquivo: C:\Meus Documentos\curto.txt|21/12/2007 10:25:06|21/12/2007 10:25:07|1||2|
-		ALERTA : CNPJ/CPF do destinatário inválido na linha 0000006 COO 002980
-		ALERTA : CRZ Final inválido na linha 0000001 ALERTA : CRZ Inicial inválido na linha 0000001
-
-
-		II.b) Em caso de insucesso, retornará: Arquivo de lote não localizado.
-		*
-		*/
 
 		if(empty($resConsulta)){
 			return null; die();
@@ -344,8 +291,6 @@ class NFPUtil {
 			$strRetorno = $resConsulta->ConsultarResult;
 
 			$ln_arq = explode("\n", $strRetorno);
-
-			//echo '<pre>'; die(print_r($ln_arq));
 
 			if(!empty($ln_arq)){
 
@@ -385,23 +330,24 @@ class NFPUtil {
 								$NFPRetornoConsulta->setProtocolo( (!empty($ln_exp[0])) ? trim($ln_exp[0]) : '' );
 								$NFPRetornoConsulta->setStatus( (!empty($ln_exp[1])) ? trim($ln_exp[1]) : ''  );
 								$NFPRetornoConsulta->setAlerta( (!empty($ln_exp[2])) ? trim($ln_exp[2]) : ''  );
-								$NFPRetornoConsulta->setCnpj( (!empty($ln_exp[3])) ? trim($ln_exp[3]) : ''  );
-								$NFPRetornoConsulta->setRazaoSocial( (!empty($ln_exp[4])) ? trim($ln_exp[4]) : ''  );
-								$NFPRetornoConsulta->setResponsavel( (!empty($ln_exp[5])) ? trim($ln_exp[5]) : ''  );
 
-								$NFPRetornoConsulta->setTpProcessamento( (!empty($ln_exp[6])) ? trim($ln_exp[6]) : ''  );
-								$NFPRetornoConsulta->setNomeArquivo( (!empty($ln_exp[7])) ? trim($ln_exp[7]) : ''  );
-								$NFPRetornoConsulta->setTamanhoArquivo( (!empty($ln_exp[8])) ? trim($ln_exp[8]) : ''  );
-								$NFPRetornoConsulta->setHashArquivo( (!empty($ln_exp[9])) ? trim($ln_exp[9]) : ''  );
-								$NFPRetornoConsulta->setObservacoes( (!empty($ln_exp[10])) ? trim($ln_exp[10]) : ''  );
+								$NFPRetornoConsulta->setCnpj( (!empty($ln_exp[4])) ? trim($ln_exp[4]) : ''  );
+								$NFPRetornoConsulta->setRazaoSocial( (!empty($ln_exp[5])) ? trim($ln_exp[5]) : ''  );
+								$NFPRetornoConsulta->setResponsavel( (!empty($ln_exp[6])) ? trim($ln_exp[6]) : ''  );
 
-								$NFPRetornoConsulta->setDtRecebimento( (!empty($ln_exp[11])) ? trim($ln_exp[11]) : ''  );
-								$NFPRetornoConsulta->setDtProcessamento( (!empty($ln_exp[12])) ? trim($ln_exp[12]) : ''  );
-								$NFPRetornoConsulta->setTempoProcessamento( (!empty($ln_exp[13])) ? trim($ln_exp[13]) : '' );
-								$NFPRetornoConsulta->setDtReferenciaArquivo( (!empty($ln_exp[14])) ? trim($ln_exp[14]) : ''  );
+								$NFPRetornoConsulta->setTpProcessamento( (!empty($ln_exp[7])) ? trim($ln_exp[7]) : ''  );
+								$NFPRetornoConsulta->setNomeArquivo( (!empty($ln_exp[8])) ? trim($ln_exp[8]) : ''  );
+								$NFPRetornoConsulta->setTamanhoArquivo( (!empty($ln_exp[9])) ? trim($ln_exp[9]) : ''  );
+								$NFPRetornoConsulta->setHashArquivo( (!empty($ln_exp[10])) ? trim($ln_exp[10]) : ''  );
+								$NFPRetornoConsulta->setObservacoes( (!empty($ln_exp[11])) ? trim($ln_exp[11]) : ''  );
 
-								$NFPRetornoConsulta->setCfsProcessados( (!empty($ln_exp[15])) ? trim($ln_exp[15]) : ''  );
-								$NFPRetornoConsulta->setVlProcessadoLote( (!empty($ln_exp[16])) ? trim($ln_exp[16]) : ''  );
+								$NFPRetornoConsulta->setDtRecebimento( (!empty($ln_exp[12])) ? trim($ln_exp[12]) : ''  );
+								$NFPRetornoConsulta->setDtProcessamento( (!empty($ln_exp[13])) ? trim($ln_exp[13]) : ''  );
+								$NFPRetornoConsulta->setTempoProcessamento( (!empty($ln_exp[14])) ? trim($ln_exp[14]) : '' );
+								$NFPRetornoConsulta->setDtReferenciaArquivo( (!empty($ln_exp[15])) ? trim($ln_exp[15]) : ''  );
+
+								$NFPRetornoConsulta->setCfsProcessados( (!empty($ln_exp[16])) ? trim($ln_exp[16]) : ''  );
+								$NFPRetornoConsulta->setVlProcessadoLote( (!empty($ln_exp[17])) ? trim($ln_exp[17]) : ''  );
 							}
 						}
 					}
